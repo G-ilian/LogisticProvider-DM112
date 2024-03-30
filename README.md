@@ -25,15 +25,27 @@ Clone o repositório em seu computador para poder acessar o projeto:
 $ git clone git@github.com:G-ilian/LogisticProvider-DM112.git
 ```
 
+A partir desse ponto será necessário que você abra os três serviços utilizando-se do IntelliJ(Ou a Ide de sua preferência).
+    📂emailService/
+    📂entregador/
+    📂logisticProvider/
+Todos os serviços contam com um arquivo de execução que estará sempre seguido da palavara Application. Sendo assim temos respectivamente:
+LogisticProviderApplication.java
+EntregadorApplication.java
+EmailServiceApplication.java
 
-Para acessar o repositório clonado usando o terminal, digite: 
-```
-$ cd Projeto_C214-Lab
-```
-Para acessar os arquivos de código pelo terminal, digite:
-```
-$ cd API
-```
+Esses serviços devem ser todos executados, para que possamos iniciar nossos testes. Caso não esteja os encontrando, procure em todos eles no nível de pastas a seguir:
+
+📂seu_servico/
+    📂src/
+        📂main/
+            📂java/
+                📂br/
+                    servicoApplication.java
+
+
+Considerações importantes.
+<p> 1. É necessário que seja alterado em logisticProvider, em application.properties os dados de email.sender e email.password para os seus dados. </p>
 
 ## :gear: Autores
 
