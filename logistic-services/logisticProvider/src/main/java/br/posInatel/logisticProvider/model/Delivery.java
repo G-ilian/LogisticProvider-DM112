@@ -7,16 +7,16 @@ public class Delivery {
     private int orderNumber;
 
     public static enum orderStatus {DELIVERED , PENDING};
-    private Date orderDate;
     private Date deliveryDate;
 
     private String receiverCpf;
     private String receiverName;
 
+    private Order order;
 
-    public Delivery(int orderNumber, Date orderDate, Date deliveryDate, String receiverCpf, String receiverName) {
+
+    public Delivery(int orderNumber, Date deliveryDate, String receiverCpf, String receiverName) {
         this.orderNumber = orderNumber;
-        this.orderDate = orderDate;
         this.deliveryDate = deliveryDate;
         this.receiverCpf = receiverCpf;
         this.receiverName = receiverName;
@@ -29,7 +29,6 @@ public class Delivery {
     public String toString() {
         return "Delivery{" +
                 "orderNumber=" + orderNumber +
-                ", dateOrder=" + orderDate +
                 ", dateDelivered=" + deliveryDate +
                 '}';
     }
@@ -40,14 +39,6 @@ public class Delivery {
 
     public void setOrderNumber(int orderNumber) {
         this.orderNumber = orderNumber;
-    }
-
-    public Date getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(Date orderDate) {
-        this.orderDate = orderDate;
     }
 
     public Date getDeliveryDate() {
@@ -72,5 +63,9 @@ public class Delivery {
 
     public void setReceiverName(String receiverName) {
         this.receiverName = receiverName;
+    }
+
+    public Order getOrder() {
+        return order;
     }
 }

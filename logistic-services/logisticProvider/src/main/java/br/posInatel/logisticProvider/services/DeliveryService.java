@@ -2,7 +2,9 @@ package br.posInatel.logisticProvider.services;
 
 import br.posInatel.logisticProvider.client.DeliveryClient;
 import br.posInatel.logisticProvider.client.EmailClient;
+import br.posInatel.logisticProvider.client.OrderClient;
 import br.posInatel.logisticProvider.model.Delivery;
+import br.posInatel.logisticProvider.model.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,12 +23,15 @@ public class DeliveryService {
     @Autowired
     private EmailClient emailClient;
 
+    @Autowired
+    private OrderClient orderClient;
+
     // Methods
 
-    public List<Delivery> getAllOrders(){
-        List<Delivery> productsRegistered = new ArrayList<>();
+    public List<Order> getAllOrders(){
+        List<Order> productsRegistered = new ArrayList<>();
         try {
-            productsRegistered = this.deliveryClient.getAllProducts();
+            productsRegistered = this.orderClient.getAllOrders();
         } catch (Exception e) {
             System.out.println(e);
         }
@@ -44,15 +49,7 @@ public class DeliveryService {
         return deliveries;
     }
 
-    public void createDeliveredOrder(int numberOfOrder,String receiverCpf,String receiverName){
-
-        Delivery delivery = getDelivery(numberOfOrder);
-        // Date of delivery
-        delivery.setDeliveryDate(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()));
-        // Receiver infos
-        delivery.setReceiverCpf(receiverCpf);
-        delivery.setReceiverName(receiverName);
-
+    public void createDeliveredOrder(Delivery delivery){
         try{
             deliveryClient.registerDelivery(delivery);
         }catch (Exception e){
@@ -60,11 +57,13 @@ public class DeliveryService {
         }
 
         try{
-            String content ="Olá, Gabriel..." +
-                    "A entrega de seu pedido " +delivery.getOrderNumber()+
-                    "Foi concluída. A recepeção do produto foi feita por "+
-                    delivery.getReceiverName()+" no CPF: "+delivery.getReceiverCpf();
-            emailClient.callSendMailService(numberOfOrder,content);
+            Order order = orderClient.getOrder(delivery.getOrderNumber());
+            String content ="Olá, "+order.getClientName() +
+                    ",a entrega de seu pedido " +delivery.getOrderNumber()+
+                    " Foi concluída. A recepeção do produto foi feita por "+
+                    delivery.getReceiverName()+" documento: "+delivery.getReceiverCpf();
+
+            emailClient.callSendMailService(delivery.getOrderNumber(), content,order.getClientEmail());
         }catch (Exception e){
             System.out.println(e);
         }

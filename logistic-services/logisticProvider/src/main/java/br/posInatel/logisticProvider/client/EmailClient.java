@@ -16,15 +16,12 @@ public class EmailClient {
     @Value("${email.sender}")
     private String sendFromAddress;
 
-    @Value("${email.to}")
-    private String sendToAddress;
-
     @Value("${email.password}")
     private String sendPassAddress;
 
     private String mailEndpoint="/sendEmail";
 
-    public void callSendMailService(int orderNumber, String content) {
+    public void callSendMailService(int orderNumber, String content,String sendToAddress) {
 
         String url = emailRestUrl + mailEndpoint ;
         System.out.println("URL: " + url);
