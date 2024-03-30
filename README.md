@@ -26,26 +26,46 @@ $ git clone git@github.com:G-ilian/LogisticProvider-DM112.git
 ```
 
 A partir desse ponto será necessário que você abra os três serviços utilizando-se do IntelliJ(Ou a Ide de sua preferência).
+```
     📂emailService/
     📂entregador/
     📂logisticProvider/
+```  
 Todos os serviços contam com um arquivo de execução que estará sempre seguido da palavara Application. Sendo assim temos respectivamente:
 LogisticProviderApplication.java
 EntregadorApplication.java
 EmailServiceApplication.java
 
 Esses serviços devem ser todos executados, para que possamos iniciar nossos testes. Caso não esteja os encontrando, procure em todos eles no nível de pastas a seguir:
-
-📂seu_servico/
-    📂src/
-        📂main/
-            📂java/
-                📂br/
-                    servicoApplication.java
-
+```
+    📂seu_servico/
+        📂src/
+            📂main/
+                📂java/
+                    📂br/
+                        servicoApplication.java
+```
 
 Considerações importantes.
 <p> 1. É necessário que seja alterado em logisticProvider, em application.properties os dados de email.sender e email.password para os seus dados. </p>
+<p>2. Caso necessário altere as portas dos serviços em application.properties e depois reflita as alterações no application.properties do logisticProvider</p>
+
+#### 🚀 Executando
+<p>Com todos os serviços em funcionamento, acione o Postman e faça requisições para os endpoints que são expostos pelo LogisticProvider, sendo eles: </p>
+<p> [POST] - Criar Entrega : /LogisticProvider/api/createDelivery </p>
+<p> [GET] - Recuperar pedidos entregues : /api/getAllDeliveredOrders </p>
+<p> [GET] - Recuperar pedidos : /api/getAllOrders </p>
+
+Para o request do tipo Post será necessário informar um Json, com dados do tipo:
+```
+    {
+        "receiverCpf":"cpf_do_receptor",
+        "receiverName":"nome_do_receptor",
+        "deliveryDate":"2024-03-29T15:22:30",
+        "orderNumber":1
+    }
+```
+
 
 ## :gear: Autores
 
