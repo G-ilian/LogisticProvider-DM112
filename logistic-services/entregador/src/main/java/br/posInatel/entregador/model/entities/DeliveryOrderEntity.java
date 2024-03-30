@@ -12,6 +12,8 @@ public class DeliveryOrderEntity {
     @Column(name="numeroPedido")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long orderNumber;
+
+    @Column(name="status")
     private int status;
     @Column(name="dataPedido",nullable = false)
     @Temporal(TemporalType.DATE)

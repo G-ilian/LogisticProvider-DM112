@@ -1,6 +1,7 @@
 package br.posInatel.entregador.interfaces;
 
 import br.posInatel.entregador.model.DeliveryOrder;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
@@ -13,7 +14,7 @@ public interface DeliveryOrderInterface {
     DeliveryOrder getOrderByNumber(long orderNumber); // OK
 
     // Create
-    void createDeliveryOrder(DeliveryOrder delivery); // OK
+    ResponseEntity<String> createDeliveryOrder(DeliveryOrder delivery); // OK
 
     // Update
     void updateDeliveryOrder(DeliveryOrder delivery, long orderNumber);

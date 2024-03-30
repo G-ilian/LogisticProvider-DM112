@@ -4,6 +4,7 @@ import br.posInatel.entregador.interfaces.DeliveryOrderInterface;
 import br.posInatel.entregador.model.DeliveryOrder;
 import br.posInatel.entregador.service.DeliveryOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class DeliveryOrderRest implements DeliveryOrderInterface {
 
     @Override
     @GetMapping("deliveryOrders/getAllOrders")
+    @ResponseBody
     public List<DeliveryOrder> getAllOrders() {
         return serviceOrder.getAllOrders();
     }
@@ -37,12 +39,13 @@ public class DeliveryOrderRest implements DeliveryOrderInterface {
 
     @Override
     @PostMapping("deliveryOrders/createDelivery")
-    public void createDeliveryOrder(@RequestBody DeliveryOrder delivery) {
-        serviceOrder.createDeliveryOrder(delivery);
+    @ResponseBody
+    public ResponseEntity<String> createDeliveryOrder(@RequestBody DeliveryOrder delivery) {
+        return serviceOrder.createDeliveryOrder(delivery);
     }
 
     @Override
-    @PutMapping("deliveryOrders/updateDeliveryRegister")
+    @PutMapping("deliveryOrders/updateDeliveryRegister/{orderNumber}")
     public void updateDeliveryOrder(@RequestBody DeliveryOrder delivery,@PathVariable("orderNumber") long orderNumber) {
         serviceOrder.updateDeliveryOrder(delivery,orderNumber);
     }
