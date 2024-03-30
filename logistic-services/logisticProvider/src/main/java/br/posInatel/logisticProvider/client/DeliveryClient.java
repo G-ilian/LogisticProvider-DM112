@@ -21,28 +21,50 @@ public class DeliveryClient {
     @Value("${delivery.rest.url}")
     private String deliveryUrl;
 
-    private final String endpoint="/deliverys";
+    private final String endpoint="deliveryOrders";
 
     public void registerDelivery(Delivery delivery){
-        String url = deliveryUrl+endpoint;
-
+        String url = deliveryUrl+endpoint+"/updateDeliveryRegister/"+delivery.getOrderNumber();
         WebClient.create(url)
-                .post()
+                .put()
                 .contentType(MediaType.APPLICATION_JSON)
                 .header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE)
                 .body(Mono.just(delivery), Delivery.class)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve();
+
+
     }
 
-    public List<Delivery> getAllDeliverys(){
-        String url = deliveryUrl+endpoint;
+    public List<Delivery> getAllProducts(){
+        String url = deliveryUrl+endpoint+"/getAllOrders";
 
         return WebClient.create(url).
                 get().
                 header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE).
                 retrieve().
                 bodyToFlux(Delivery.class).collectList().log().block();
+    }
+
+
+    public List<Delivery> getAllDeliverys(){
+        String url = deliveryUrl+endpoint+"/getAllDeliveredOrders";
+
+        return WebClient.create(url).
+                get().
+                header(HttpHeaders.ACCEPT, MediaType.APPLICATION_JSON_VALUE).
+                retrieve().
+                bodyToFlux(Delivery.class).collectList().log().block();
+    }
+
+    public Delivery getDelivery(long orderNumber){
+        String url = deliveryUrl+endpoint+"/getOrderByNumber/"+orderNumber;
+
+        return WebClient.create(url)
+                .get()
+                .retrieve()
+                .bodyToMono(Delivery.class)
+                .block();
     }
 
 

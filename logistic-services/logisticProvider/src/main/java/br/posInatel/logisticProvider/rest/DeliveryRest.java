@@ -18,23 +18,21 @@ public class DeliveryRest implements DeliveryInterface {
 
     @Override
     @GetMapping("/getAllOrders")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public List<Delivery> getAllOrders() {
         return service.getAllOrders();
     }
 
     @Override
     @GetMapping("/getAllDeliveredOrders")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
     public List<Delivery> getAllDeliveredOrders() {
         return service.getAllDeliveredOrders();
     }
 
     @Override
-    @PostMapping("/registerDeliveredOrder")
+    @PutMapping("/registerDeliveredOrder")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void createDeliveredOrder(@PathVariable("nOrder") long numberOfOrder) {
-        service.createDeliveredOrder();
+    public void createDeliveredOrder(@RequestBody Delivery delivery) {
+        service.createDeliveredOrder(delivery.getOrderNumber(), delivery.getReceiverCpf(), delivery.getReceiverName());
     }
 
 }

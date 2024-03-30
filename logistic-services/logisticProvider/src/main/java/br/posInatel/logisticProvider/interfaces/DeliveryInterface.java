@@ -11,7 +11,7 @@ import java.util.List;
 public interface DeliveryInterface {
     public List<Delivery> getAllOrders();
     public List<Delivery> getAllDeliveredOrders();
-    public void createDeliveredOrder(long numberOfOrder);
+    public void createDeliveredOrder(Delivery delivery);
 
 
 
