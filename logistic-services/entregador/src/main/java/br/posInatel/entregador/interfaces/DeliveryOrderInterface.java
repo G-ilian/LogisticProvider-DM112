@@ -9,9 +9,7 @@ public interface DeliveryOrderInterface {
 
     // Retrieve
     List<DeliveryOrder> getAllOrders(); // OK
-    List<DeliveryOrder> getAllDeliveredOrders();
-
-    DeliveryOrder getOrderByNumber(long orderNumber); // OK
+    DeliveryOrder getDeliveryByNumber(long orderNumber); // OK
 
     // Create
     ResponseEntity<String> createDeliveryOrder(DeliveryOrder delivery); // OK

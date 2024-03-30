@@ -16,25 +16,18 @@ public class DeliveryOrderRest implements DeliveryOrderInterface {
     @Autowired
     private DeliveryOrderService serviceOrder;
 
-
     @Override
     @GetMapping("deliveryOrders/getAllOrders")
     @ResponseBody
     public List<DeliveryOrder> getAllOrders() {
-        return serviceOrder.getAllOrders();
-    }
-
-    @Override
-    @GetMapping("deliveryOrders/getAllDeliveredOrders")
-    public List<DeliveryOrder> getAllDeliveredOrders() {
         return serviceOrder.getAllDeliveredOrders();
     }
 
     @Override
     @GetMapping("deliveryOrders/getOrderByNumber/{orderNumber}")
     @ResponseBody
-    public DeliveryOrder getOrderByNumber(@PathVariable("orderNumber") long orderNumber) {
-        return serviceOrder.convertToDeliveryOrder(serviceOrder.getOrderByNumber(orderNumber));
+    public DeliveryOrder getDeliveryByNumber(@PathVariable("orderNumber") long orderNumber) {
+        return serviceOrder.convertToDeliveryOrder(serviceOrder.getDeliveryByNumber(orderNumber));
     }
 
     @Override

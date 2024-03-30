@@ -10,6 +10,4 @@ import java.util.List;
 
 @Repository
 public interface DeliveryOrderRepository extends JpaRepository<DeliveryOrderEntity,Integer> {
-    @Transactional(readOnly = true)
-    List<DeliveryOrderEntity> findByStatus(int status);
 }

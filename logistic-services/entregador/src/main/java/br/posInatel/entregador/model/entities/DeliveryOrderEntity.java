@@ -9,62 +9,32 @@ import java.util.Date;
 @Table(name="Entregas")
 public class DeliveryOrderEntity {
     @Id
-    @Column(name="numeroPedido")
+    @Column(name="idEntrega")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long orderNumber;
-
-    @Column(name="status")
-    private int status;
-    @Column(name="dataPedido",nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date orderDate;
+    private long idEntrega;
 
     @Column(name="dataEntrega",nullable = true)
     @Temporal(TemporalType.DATE)
     private Date deliveryDate;
 
-
-    @Column(name="receiver_id")
+    @Column(name="receiver_cpf")
     private String receiverCpf;
 
     @Column(name="receiver_name")
     private String receiverName;
 
+    @OneToOne
+    @JoinColumn(name = "orderNumber")
+    private OrderEntity order;
 
-    @Column(name="client_id")
-    private String clientCpf;
-
-    @Column(name="client_name")
-    private String clientName;
-
-    public DeliveryOrderEntity() {
-        this.status = DeliveryOrder.STATUS.CONFIRMED.ordinal();
+    public long getIdEntrega() {
+        return idEntrega;
     }
 
-
-    public long getOrderNumber() {
-        return orderNumber;
+    public void setIdEntrega(long idEntrega) {
+        this.idEntrega = idEntrega;
     }
 
-    public void setOrderNumber(long orderNumber) {
-        this.orderNumber = orderNumber;
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    public Date getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(Date orderDate) {
-        this.orderDate = orderDate;
-    }
 
     public Date getDeliveryDate() {
         return deliveryDate;
@@ -90,19 +60,11 @@ public class DeliveryOrderEntity {
         this.receiverName = receiverName;
     }
 
-    public String getClientCpf() {
-        return clientCpf;
+    public OrderEntity getOrder() {
+        return order;
     }
 
-    public void setClientCpf(String clientCpf) {
-        this.clientCpf = clientCpf;
-    }
-
-    public String getClientName() {
-        return clientName;
-    }
-
-    public void setClientName(String clientName) {
-        this.clientName = clientName;
+    public void setOrder(OrderEntity order) {
+        this.order = order;
     }
 }

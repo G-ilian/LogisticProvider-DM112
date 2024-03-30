@@ -1,9 +1,12 @@
 package br.posInatel.entregador.service;
 
 
+import br.posInatel.entregador.client.InternalClient;
 import br.posInatel.entregador.model.DeliveryOrder;
+import br.posInatel.entregador.model.Order;
 import br.posInatel.entregador.model.dao.DeliveryOrderRepository;
 import br.posInatel.entregador.model.entities.DeliveryOrderEntity;
+import br.posInatel.entregador.model.entities.OrderEntity;
 import br.posInatel.entregador.rest.exceptions.DeliveryNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,7 +22,11 @@ public class DeliveryOrderService  {
     @Autowired
     private DeliveryOrderRepository repo;
 
-    public List<DeliveryOrder> getAllOrders(){
+    @Autowired
+    private InternalClient orderClient;
+
+
+    public List<DeliveryOrder> getAllDeliveredOrders(){
         List<DeliveryOrderEntity> entities = repo.findAll();
         List<DeliveryOrder> orders = new ArrayList<>();
 
@@ -30,84 +37,75 @@ public class DeliveryOrderService  {
         return orders;
     }
 
-    public List<DeliveryOrder> getAllDeliveredOrders(){
-        List<DeliveryOrderEntity> entities = repo.findByStatus(1);
-        List<DeliveryOrder> orders = new ArrayList<>();
-
-        for (DeliveryOrderEntity entity : entities) {
-            DeliveryOrder deliveryOrder = convertToDeliveryOrder(entity);
-            orders.add(deliveryOrder);
-        }
-        return orders;
-    }
-
-    public DeliveryOrderEntity getOrderByNumber(long orderNumber){
+    public DeliveryOrderEntity getDeliveryByNumber(long orderNumber){
         Optional<DeliveryOrderEntity> obj = repo.findById((int)orderNumber);
         return obj.orElseThrow(() -> new DeliveryNotFoundException("Order " + orderNumber + " not found."));
     }
 
+
+
     public ResponseEntity<String> createDeliveryOrder(DeliveryOrder deliveryOrder){
-        DeliveryOrderEntity entity = convertToEntity(deliveryOrder);
-        if(productExists(entity.getOrderNumber())){
-            System.out.println("Create delivery");
-            repo.save(entity);
-            return ResponseEntity.ok("Delivery created sucessfuly!");
+        if (!existsOrder(deliveryOrder.getOrderNumber())) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Order doesn't exist.");
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cannot create delivery. Order does not exist.");
+        DeliveryOrderEntity entity = convertToEntity(deliveryOrder,orderClient);
+        System.out.println("Create delivery");
+
+        repo.save(entity);
+
+        Order order = orderClient.getOrder(entity.getOrder());
+        order.setStatus(1);
+        orderClient.updateOrder(order, order.getOrderNumber());
+
+
+        return ResponseEntity.ok("Delivery created sucessfuly!");
     }
 
     public void updateDeliveryOrder(DeliveryOrder delivery, long orderNumber){
-        if(productExists(orderNumber)){
-            DeliveryOrderEntity entity = getOrderByNumber(orderNumber);
-            entity.setOrderNumber(delivery.getOrderNumber());
-            entity.setDeliveryDate(delivery.getDeliveryDate());
-            entity.setOrderDate(delivery.getOrderDate());
-            entity.setClientCpf(delivery.getClientCpf());
-            entity.setClientName(delivery.getClientName());
-            entity.setReceiverCpf(delivery.getReceiverCpf());
-            entity.setReceiverName(delivery.getReceiverName());
-            entity.setStatus(1);
-            repo.save(entity);
+            if(existsOrder(orderNumber)){
+                DeliveryOrderEntity DeliveryEntity = getDeliveryByNumber(orderNumber);
+                DeliveryEntity.setDeliveryDate(delivery.getDeliveryDate());
+                DeliveryEntity.setReceiverCpf(delivery.getReceiverCpf());
+                DeliveryEntity.setReceiverName(delivery.getReceiverName());
+                repo.save(DeliveryEntity);
 
-            System.out.println("O registro da entrega para o pedido "+orderNumber+" foi atualizado com sucesso!!!");
-        }
-
+                System.out.println("O registro da entrega para o pedido "+orderNumber+" foi atualizado com sucesso!!!");
+            }
     }
 
-    private boolean productExists(long orderNumber){
-        try {
-            getOrderByNumber(orderNumber);
-            return true;
-        } catch (DeliveryNotFoundException ex) {
-            return false;
-        }
-    }
     public static DeliveryOrder  convertToDeliveryOrder (DeliveryOrderEntity entity){
-        DeliveryOrder deliveryOrder = new DeliveryOrder(entity.getOrderNumber(),
+        DeliveryOrder deliveryOrder = new DeliveryOrder(entity.getIdEntrega(),
                 entity.getReceiverCpf(),
                 entity.getReceiverName(),
-                entity.getClientCpf(),
-                entity.getClientName(),
                 entity.getDeliveryDate(),
-                entity.getOrderDate());
+                entity.getOrder().getOrderNumber());
 
         return deliveryOrder;
     }
 
-    public static DeliveryOrderEntity convertToEntity(DeliveryOrder deliveryOrder){
+    public static DeliveryOrderEntity convertToEntity(DeliveryOrder deliveryOrder,InternalClient orderClient){
         DeliveryOrderEntity entity = new DeliveryOrderEntity();
-        entity.setClientCpf(deliveryOrder.getClientCpf());
         entity.setReceiverCpf(deliveryOrder.getReceiverCpf());
         entity.setDeliveryDate(deliveryOrder.getDeliveryDate());
-        entity.setOrderDate(deliveryOrder.getOrderDate());
-        entity.setClientName(deliveryOrder.getClientName());
         entity.setReceiverName(deliveryOrder.getReceiverName());
-        entity.setOrderNumber(deliveryOrder.getOrderNumber());
+
+        OrderEntity order = orderClient.getOrderByNumber(deliveryOrder.getOrderNumber());
+
+        entity.setOrder(order);
 
         return entity;
     }
 
+    private boolean existsOrder(long orderNumber){
 
+        try{
+            OrderEntity order = orderClient.getOrderByNumber(orderNumber);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
+
+    }
 
 
 }
