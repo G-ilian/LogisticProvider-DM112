@@ -42,7 +42,7 @@ Esses serviços devem ser todos executados, para que possamos iniciar nossos tes
         📂src/
             📂main/
                 📂java/
-                    📂br/
+                    📂br.posInatel.servico_em_questao/
                         servicoApplication.java
 ```
 
@@ -51,6 +51,25 @@ Considerações importantes.
 <p>2. Caso necessário altere as portas dos serviços em application.properties e depois reflita as alterações no application.properties do logisticProvider</p>
 
 #### 🚀 Executando
+NOTA IMPORTANTE
+Os endpoints tem validação, ou seja, caso tente criar uma entrega para um pedido inexistente será retornado o erro.Para efetuar os testes sugerimos:
+1. Encontre a localização de OrderClientRunner no serviço de logisticProvider
+```
+    📂logisticProvider/
+        📂src/
+            📂main/
+                📂java/
+                    📂br.posInatel.logisticProvider/
+                        📂client/
+                            📂runner/
+                                OrderClientCreateRunner.java
+```
+2. Execute o serviço para popular o banco
+3. Afim de acessar o banco entre em : http://sua_url/entregador/h2-console
+
+Com as etapas anteriormente concluída temos a possibilidade de >
+
+<p> [POST] - Criar Entrega : /api/createDelivery </p>
 <p>Com todos os serviços em funcionamento, acione o Postman e faça requisições para os endpoints que são expostos pelo LogisticProvider, sendo eles: </p>
 <p> [POST] - Criar Entrega : /api/createDelivery </p>
 <p> [GET] - Recuperar pedidos entregues : /api/getAllDeliveredOrders </p>
@@ -65,6 +84,8 @@ Para o request do tipo Post será necessário informar um Json, com dados do tip
         "orderNumber":1
     }
 ```
+
+
 
 
 ## :gear: Autores
