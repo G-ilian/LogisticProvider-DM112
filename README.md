@@ -72,7 +72,6 @@ Com as etapas anteriormente concluída.
 <p>Com todos os serviços em funcionamento, acione o Postman e faça requisições para os endpoints que são expostos pelo LogisticProvider, sendo eles: </p>
 
 <p> [POST] - Criar Entrega : /api/createDelivery </p>
-<p> [POST] - Criar Entrega : /api/createDelivery </p>
 <p> [GET] - Recuperar pedidos entregues : /api/getAllDeliveredOrders </p>
 <p> [GET] - Recuperar pedidos : /api/getAllOrders </p>
 
