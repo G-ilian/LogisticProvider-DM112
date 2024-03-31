@@ -67,10 +67,11 @@ Os endpoints tem validação, ou seja, caso tente criar uma entrega para um pedi
 2. Execute o serviço para popular o banco
 3. Afim de acessar o banco entre em : http://sua_url/entregador/h2-console
 
-Com as etapas anteriormente concluída temos a possibilidade de >
+Com as etapas anteriormente concluída.
+
+<p>Com todos os serviços em funcionamento, acione o Postman e faça requisições para os endpoints que são expostos pelo LogisticProvider, sendo eles: </p>
 
 <p> [POST] - Criar Entrega : /api/createDelivery </p>
-<p>Com todos os serviços em funcionamento, acione o Postman e faça requisições para os endpoints que são expostos pelo LogisticProvider, sendo eles: </p>
 <p> [POST] - Criar Entrega : /api/createDelivery </p>
 <p> [GET] - Recuperar pedidos entregues : /api/getAllDeliveredOrders </p>
 <p> [GET] - Recuperar pedidos : /api/getAllOrders </p>
